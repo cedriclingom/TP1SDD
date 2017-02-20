@@ -49,10 +49,9 @@ main.o : main.c listeContigue.h
 clean :
 	rm $(OBJ) *.*~
 
+
 #Regle d'utilisation de valgrind
 
-valgrind:  agenda
+valgrind:  main
 	$(VG) ./main fichier.txt
-
-#Regle
 

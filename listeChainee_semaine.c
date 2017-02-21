@@ -218,54 +218,6 @@ int sauvegardeDansFichier(semaine_t * pTeteListe)
 
 
 
- /* int sauvegardeDansFichier(semaine_t * pTeteListe)
-{
-  int codeErr=1, i;
-  semaine_t * pcour1=pTeteListe;
-  action_t * pcour2=NULL;
-  FILE * f = fopen("sauvegarde.txt","w");
-  if (f !=NULL)
-    {
-      while (pcour1 != NULL)
-	{
-
-	  pcour2 = pcour1->pListeAction;
-	  while (pcour2 != NULL)
-	    {
-	      i=0;
-	      while (i < TAILLE_SEMAINE)
-		{
-		  fprintf(f,"%c",(pcour1->ann_sem)[i]);
-		  ++i;
-		}
-
-	      i=0;
-	      while (i < TAILLE_JOUR_HR)
-		{
-		  fprintf(f,"%c",(pcour2->jour_heure)[i]);
-		  ++i;
-		}
-	      i=0;
-	      while (i < TAILLE_ACTION)
-                {
-                  fprintf(f,"%c",(pcour2->nom_action)[i]);
-                  ++i;
-                }
-	      fprintf(f,"\n");
-	      pcour2 = pcour2->pAction_suiv;
-	    }
-	  pcour1 = pcour1->pSem_suiv;
-	}
-      fclose(f);
-    }
-  else
-    {
-      codeErr = 0;
-    }
-  return codeErr;
-  }*/
-
-
 
 
 

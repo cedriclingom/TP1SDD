@@ -9,10 +9,6 @@ int compareChaineN (char * s1, char * s2, int taille)
     {
       ++i;
     }
-  if(!i)
-    {
-      ++i;
-    }
   return i;
 }
 
@@ -25,8 +21,16 @@ int rechercherMotif(char * nomAction, char * motif)
     {
       
       nbCompare = compareChaineN(nomAction+decalage, motif, tailleMotif);
-      tailleResteAction -=nbCompare;
-      decalage += nbCompare;
+      if (!nbCompare)
+	{
+	  tailleResteAction -= nbCompare+1;
+	  decalage += nbCompare+1;
+	}
+      else
+	{
+	   tailleResteAction -= nbCompare;
+	   decalage += nbCompare;
+	}
     }
   return nbCompare;
 }
@@ -145,11 +149,14 @@ void afficherListeContigue(jour_t ** pDebut, jour_t **pFin)
 void libererListeContigue(jour_t ** pDebut, jour_t ** pFin)
 {
   int i=0;
-  while ((pDebut+i) < pFin)
+  if(pFin != NULL)
     {
+      while ((pDebut+i) < pFin)
+	{
+	  free(pDebut[i]);
+	  ++i;
+	}
       free(pDebut[i]);
-      ++i;
     }
-  free(pDebut[i]);
   free(pDebut);
 }

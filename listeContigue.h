@@ -22,6 +22,7 @@ jour_t ** allocationListeContigue ();
 jour_t * allocationJour();
 void creerJour(jour_t *, semaine_t *, action_t *);
 void insererJour(jour_t **, jour_t *,int);
+jour_t * lectureSemaineJour();
 int lectureMotif(char **);
 void creerListeJour(semaine_t *, char *, jour_t **,jour_t ***);
 void afficherListeContigue(jour_t **, jour_t **);

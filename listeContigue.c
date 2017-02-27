@@ -50,6 +50,26 @@ jour_t * allocationJour()
   return pJour;
 }
 
+
+jour_t * lectureSemaineJour()
+{
+  jour_t * pJour= allocationJour();
+  if(pJour != NULL)
+    {
+      printf("Le contenu de la sauvegarde avant supression\n");
+      afficheSauvegarde();
+      do
+	{
+	  printf("Veuillez entrer l'année et la semaine\n");
+	  scanf("%s", pJour->ann_sem);
+	  printf("Veuillez entrer le jour et l'heure\n");
+	  scanf("%s", pJour->jour_heure);
+	}while ((strlen(pJour->ann_sem) != TAILLE_SEMAINE-1) || (strlen(pJour->jour_heure) != TAILLE_JOUR_HR-1));
+    }
+  return pJour;
+}
+
+
 void creerJour(jour_t * pJour, semaine_t * pSemaine, action_t * pAction)
 {
   strcpy(pJour->ann_sem, pSemaine->ann_sem);

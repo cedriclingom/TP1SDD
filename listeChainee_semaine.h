@@ -35,6 +35,7 @@ void creerListe (semaine_t **, FILE *);
 int lectureFichier(char *, semaine_t **);
 int sauvegardeDansFichier(semaine_t *);
 void suppressionSemaine(semaine_t **);
+void afficheSauvegarde();
 void supression(semaine_t **, char *, char *);
 void libererListe(semaine_t **);
 

@@ -230,7 +230,25 @@ void suppressionSemaine(semaine_t ** ppSemaine)
 }
 
 
+void afficheSauvegarde()
+{
+  int tailleChaine =TAILLE_SEMAINE+TAILLE_JOUR_HR+TAILLE_ACTION-3; 
+  FILE * f = fopen("./sauvegarde.txt","r");
+  char s[TAILLE_SEMAINE+TAILLE_JOUR_HR+TAILLE_ACTION-3];
+  char * ch = NULL;
+  if (f != NULL)
+    {
+      ch = fgets(s,tailleChaine, f);
+      while (ch != NULL)
+	{
+	  printf("%s", s);
+	  ch = fgets(s,tailleChaine, f);
+	}
+      fclose(f);
+    }
+}
 
+  
 
 void supression(semaine_t **ppTeteListe, char * ann_sem, char * jour_heure)
 {
@@ -254,6 +272,9 @@ void supression(semaine_t **ppTeteListe, char * ann_sem, char * jour_heure)
 		}
 	    }
 	}
+      sauvegardeDansFichier(*ppTeteListe);
+      printf("Le contenu de la sauvegarde après supression\n");
+      afficheSauvegarde();
     }
 }
 

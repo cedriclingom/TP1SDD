@@ -13,6 +13,7 @@ int main (int argc, char ** argv)
       if ((pTeteListeContigue !=NULL) && (lectureMotif(&pMotif)))
 	{
 	  creerListeJour(pTeteAgenda, pMotif, pTeteListeContigue, &pFinListeContigue);
+	  afficherListeContigue(pTeteListeContigue, pFinListeContigue);
 	  libererListeContigue(pTeteListeContigue, pFinListeContigue);
 	  free(pMotif);
 	}

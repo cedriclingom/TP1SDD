@@ -19,14 +19,16 @@ int compareChaineN (char * s1, char * s2, int taille)
 
 int rechercherMotif(char * nomAction, char * motif)
 {
-  int tailleMotif = strlen(motif),decalage=0, tailleResteAction = (TAILLE_ACTION-2)-decalage;
+  int tailleMotif = strlen(motif),nbCompare = 0, decalage=0, tailleResteAction = (TAILLE_ACTION-2)-decalage;
   
-  while ((tailleMotif <= tailleResteAction) && (decalage < tailleMotif))
+  while ((tailleMotif <= tailleResteAction) && (nbCompare < tailleMotif))
     {
-      decalage = compareChaineN(nomAction+decalage, motif, tailleMotif);
-      tailleResteAction -=decalage;      
+      
+      nbCompare = compareChaineN(nomAction+decalage, motif, tailleMotif);
+      tailleResteAction -=nbCompare;
+      decalage += nbCompare;
     }
-  return decalage;
+  return nbCompare;
 }
 
 
@@ -52,10 +54,9 @@ void creerJour(jour_t * pJour, semaine_t * pSemaine, action_t * pAction)
 
 
 
-void insererJour(jour_t ** pDebut, jour_t*** ppFin, jour_t * pJour,int indice)
+void insererJour(jour_t ** pDebut,jour_t * pJour,int indice)
 {
   pDebut[indice] = pJour;
-  *ppFin = *ppFin + 1;
 }
 
 
@@ -82,6 +83,7 @@ void creerListeJour(semaine_t * pTeteListe, char * motif, jour_t ** pDebut, jour
   action_t * pcour2 = NULL;
   jour_t * pJour = NULL;
   int nbElm=0, motifTrouver=0,tailleMotif=strlen(motif);
+  *ppFin = NULL;
   while ((nbElm < TAILLE_MAX) && (pcour1 != NULL))
     {
       pcour2 = pcour1->pListeAction;
@@ -94,7 +96,15 @@ void creerListeJour(semaine_t * pTeteListe, char * motif, jour_t ** pDebut, jour
 	      if (pJour != NULL)
 		{
 		  creerJour(pJour, pcour1, pcour2);
-		  insererJour(pDebut, ppFin, pJour, nbElm);
+		  if(*ppFin != NULL)
+		    {
+		      *ppFin = *ppFin + 1;
+		    }
+		  else
+		    {
+		      *ppFin = pDebut;
+		    }
+		  insererJour(pDebut,pJour, nbElm);
 		  ++nbElm;
 		}
 	    }
@@ -103,6 +113,33 @@ void creerListeJour(semaine_t * pTeteListe, char * motif, jour_t ** pDebut, jour
       pcour1 = pcour1->pSem_suiv;
     }
 }
+
+
+void afficherListeContigue(jour_t ** pDebut, jour_t **pFin)
+{
+  int i=0, j=0;
+  jour_t ** pcour=pDebut, ** pprec=NULL;
+  if (pFin != NULL)
+    {
+      pprec = pcour;
+      printf("%s\n", pcour[i]->ann_sem);
+      while ((pcour + i) <= pFin){
+	while(((pcour + i) <= pFin) && !strcmp(pcour[i]->ann_sem, pprec[j]->ann_sem))
+	  {
+	    printf("\t%s\n",pcour[i]->jour_heure);
+	    ++i;
+	  }
+	if (((pcour + i) <= pFin) && strcmp(pcour[i]->ann_sem, pprec[j]->ann_sem))
+	  {
+	    printf("\n%s\n", pcour[i]->ann_sem);
+	    printf("\t%s\n", pcour[i]->jour_heure);
+	    j=i;
+	    ++i;
+	  }
+      }
+    }
+}
+
 
 
 void libererListeContigue(jour_t ** pDebut, jour_t ** pFin)

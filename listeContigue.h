@@ -1,10 +1,7 @@
 #ifndef AGENDA_LISTECONTIGUE_H
 #define AGENDA_LISTECONTIGUE_H
 
-
-
 #include "./listeChainee_semaine.h"
-
 
 
 #define TAILLE_MAX 20
@@ -24,9 +21,10 @@ int rechercherMotif(char *, char *);
 jour_t ** allocationListeContigue ();
 jour_t * allocationJour();
 void creerJour(jour_t *, semaine_t *, action_t *);
-void insererJour(jour_t **,jour_t ***, jour_t *,int);
+void insererJour(jour_t **, jour_t *,int);
 int lectureMotif(char **);
 void creerListeJour(semaine_t *, char *, jour_t **,jour_t ***);
+void afficherListeContigue(jour_t **, jour_t **);
 void libererListeContigue(jour_t **, jour_t **);
 
 #endif

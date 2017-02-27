@@ -31,5 +31,4 @@ void creerAction (action_t *, char*, char *);
 action_t ** rechercherAction (action_t **, char *, int *);
 void insertionAction (action_t **, action_t *);
 void suppressionAction(action_t **);
-
 #endif

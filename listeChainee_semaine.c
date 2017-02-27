@@ -231,6 +231,35 @@ void suppressionSemaine(semaine_t ** ppSemaine)
 
 
 
+
+void supression(semaine_t **ppTeteListe, char * ann_sem, char * jour_heure)
+{
+  semaine_t ** precSemaine = NULL;
+  action_t ** precAction =NULL;
+  int trouver=0;
+  if (*ppTeteListe !=NULL)
+    {
+      precSemaine = rechercherSemaine(ppTeteListe, ann_sem, &trouver);
+      if (trouver)
+	{
+	  trouver = 0;
+	  precAction = rechercherAction(&((*precSemaine)->pListeAction), jour_heure, &trouver);
+
+	  if(trouver)
+	    {
+	      suppressionAction(precAction);
+	      if((*precSemaine)->pListeAction == NULL)
+		{
+		  suppressionSemaine(precSemaine);
+		}
+	    }
+	}
+    }
+}
+
+
+
+
 void libererListe(semaine_t ** ppSemaine)
 {
   while ((*ppSemaine) != NULL)

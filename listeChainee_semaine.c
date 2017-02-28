@@ -1,11 +1,10 @@
-/*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/*                         listeChaine_semaine.c:  Définition des fonctions permettent de manipuler la liste des semaines                                            */
-/*                                                                                                                                                                   */
-/*                                                                                                                                                                   */
-/*                                                                                                                                                                   */
-/*                                                                                                                                                                   */
-/*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
+/*--------------------------------------------------------------------------------------------------*/
+/*   listeChaine_semaine.c:  Définition des fonctions permettent de manipuler la liste des semaines */
+/*                         et les actions associées à une année, semaine, jour et heure particulière*/
+/*                                                                                                  */
+/*                                                                                                  */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
 
 
 
@@ -21,8 +20,139 @@
 
 
 
+/*--------------------------------------------------------------------------------------------------*/
+/* CreerSemaine         Crée la semaine en introduisant dans le bloc alloué l'année et le numéro de *//*                      semaine lu à partir d'un fichier.                                           */
+/*                                                                                                  */
+/* En entrée:   pSemaine - pointeur sur le bloc alloué pour la semaine                              */
+/*                     s - la chaine à introduire dans le bloc                                      */
+/*                                                                                                  */
+/* En sortie:   Rien en sortie                                                                      */
+/*--------------------------------------------------------------------------------------------------*/
 
-/*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+void CreerSemaine(semaine_t * pSemaine, char * s)
+{
+  strcpy(pSemaine->ann_sem,s);
+
+  pSemaine->pListeAction=NULL;
+
+  pSemaine->pSem_suiv=NULL;
+}
+
+
+
+
+
+
+
+
+/*--------------------------------------------------------------------------------------------------*/
+/* InsertionCompare       Insère une nouvelle semaine dans la liste des semaines                    */
+/*                                                                                                  */
+/* En entrée:   ppSemaine - pointeur de pointeur de tete de liste ou pointeur sur la case pointeur  *//*                          de l'élément précédent                                                  */
+/*               pSemaine - pointeur sur la semaine à insérer                                       */
+/*                                                                                                  */
+/* En sortie:   ppSemaine - pointeur de pointeur de tete de liste ou pointeur sur la case pointeur  *//*                          de l'élément précédent                                                  *//*--------------------------------------------------------------------------------------------------*/
+
+
+ 
+void InsertionSemaine (semaine_t ** ppSemaine,semaine_t * pSemaine)
+{
+  pSemaine->pSem_suiv = *ppSemaine;
+
+  *ppSemaine = pSemaine;
+}
+
+
+
+
+
+
+
+/*--------------------------------------------------------------------------------------------------*/
+/* CreerListe        Cree la liste chainée à deux niveaux triée à partir des lignes lu dans fichier */
+/*                                                                                                  */
+/* En entrée:   ppTeteListe - pointeur de pointeur de la tete de liste à deux niveaux               */
+/*                        f - Fichier à partir du quel on va lire                                   */
+/*                                                                                                  */
+/* En sortie:   ppTeteListe - pointeur de pointeur de la tete de liste à deux niveaux               */
+/*                                                                                                  */
+/* Variable(s) locale(s):                                                                           */
+/*--------------------------------------------------------------------------------------------------*/
+void CreerListe (semaine_t ** ppTeteListe, FILE * f)
+{
+  int trouver;
+
+  char s1[TAILLE_SEMAINE];
+
+  char s2[TAILLE_JOUR_HR];
+
+  char s3[TAILLE_ACTION];
+
+  semaine_t * pSemaine = NULL, ** precSemaine = NULL;
+ 
+  action_t * pAction = NULL, ** precAction = NULL;
+  while (fgets(s1,TAILLE_SEMAINE,f) != NULL)
+    {      
+
+      trouver=0;
+
+      if (fgets(s2,TAILLE_JOUR_HR,f) != NULL)
+	{
+	  precSemaine = rechercherSemaine (ppTeteListe,s1, &trouver);
+	  	 
+	  if (!(trouver))
+	    {
+
+	      pSemaine = allocationSemaine();
+
+	      if (pSemaine != NULL)
+		{
+
+		  CreerSemaine (pSemaine,s1);
+
+		  InsertionSemaine(precSemaine,pSemaine);
+
+		}
+	    }
+
+	  if (fgets(s3,TAILLE_ACTION,f) != NULL)
+	    {
+
+	      trouver = 0;
+
+	      precAction = rechercherAction (&((*precSemaine)->pListeAction), s2, &trouver);
+
+	      if (!(trouver))
+		{
+
+		  pAction = allocationAction();
+
+		  if (pAction != NULL)
+		    {
+
+		      creerAction (pAction, s2, s3);
+
+		      insertionAction(precAction, pAction);
+
+		    }
+		  else
+		    {
+
+			  libererListe(ppTeteListe);
+
+		    }
+		}
+	    }
+	}
+    }
+}
+
+
+
+
+/*--------------------------------------------------------------------------------------------------*/
 /* allocationSemaine         Alloue un bloc de la seamine.                                                                                                           */
 /*                                                                                                                                                                   */
 /* En entrée:  RAS                                                                                                                                                   */
@@ -36,25 +166,6 @@ semaine_t * allocationSemaine()
   semaine_t * pSemaine = (semaine_t *)malloc(sizeof(semaine_t));
 
   return pSemaine;
-}
-
-
-
-
-/*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-/* creerSemaine         Crée la semaine en introduisant dans le bloc alloué l'année et le numéro de semaine lu à partir d'un fichier.                                */
-/*                                                                                                                                                                   */
-/* En entrée:  ppSemaine, f   Respectivement l'adresse du pointeur sur le bloc alloué et le fichier à partir du quel on va lire                                      */
-/*                                                                                                                                                                   */
-/* En sortie:  ppSemaine   Pointeur de pointeur sur la semaine créer                                                                                                 */
-/*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
-
-void creerSemaine(semaine_t * pSemaine, char * s)
-{
-  strcpy(pSemaine->ann_sem,s);
-  pSemaine->pListeAction=NULL;
-  pSemaine->pSem_suiv=NULL;
 }
 
 
@@ -97,65 +208,8 @@ semaine_t **  rechercherSemaine (semaine_t ** ppTeteListe,char * pvaleur, int * 
 
 
 
-void insertionSemaine (semaine_t ** ppSemaine,semaine_t * pSemaine)
-{
-  pSemaine->pSem_suiv = *ppSemaine;
-  *ppSemaine = pSemaine;
-}
 
 
-void creerListe (semaine_t ** ppTeteListe, FILE * f)
-{
-  semaine_t * pSemaine = NULL, ** precSemaine = NULL;
-  action_t * pAction = NULL, ** precAction = NULL;
-  char * s4, * s5;
-  char s1[TAILLE_SEMAINE];
-  char s2[TAILLE_JOUR_HR];
-  char s3[TAILLE_ACTION];
-  int trouver;
-  s4 = fgets(s1,TAILLE_SEMAINE,f);
-  while (s4 != NULL)
-    {      
-      trouver=0;
-      if (strcmp(s4,"\n"))
-	{
-	  s5 = fgets(s2,TAILLE_JOUR_HR,f);
-	  if((s5 != NULL) && strcmp(s5,"\n"))
-	    {
-	      precSemaine = rechercherSemaine (ppTeteListe,s1, &trouver);	  	 
-	      if (!(trouver))
-		{
-		  pSemaine = allocationSemaine();
-		  if   (pSemaine != NULL)
-		    {
-		      creerSemaine (pSemaine,s1);
-		      insertionSemaine(precSemaine,pSemaine);
-		    }
-		}
-	      if(fgets(s3,TAILLE_ACTION,f) != NULL)
-		{
-		  trouver = 0;
-		  precAction = rechercherAction (&((*precSemaine)->pListeAction), s2, &trouver);
-		  if(!(trouver))
-		    {
-		      pAction = allocationAction();
-		      if   (pAction != NULL)
-			{
-			  creerAction (pAction, s2, s3);
-			  insertionAction(precAction, pAction);
-			}
-		      else
-			{
-			  libererListe(ppTeteListe);
-			}
-		    }
-		  
-		}
-	    }
-	}
-      s4 = fgets(s1,TAILLE_SEMAINE,f);
-    }
-}
 
 
 
@@ -171,7 +225,7 @@ int lectureFichier(char * ch, semaine_t ** ppTeteListe)
   fTexte = fopen(ch,"r");
   if (fTexte != NULL)
     {
-      creerListe (ppTeteListe, fTexte);
+      CreerListe (ppTeteListe, fTexte);
       fclose(fTexte);
     }
   else

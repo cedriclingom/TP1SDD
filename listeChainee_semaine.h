@@ -27,11 +27,11 @@ typedef struct semaine
 
 
 
+void CreerSemaine (semaine_t *, char *);
+void InsertionSemaine (semaine_t **, semaine_t *);
+void CreerListe (semaine_t **, FILE *);
 semaine_t * allocationSemaine();
-void creerSemaine (semaine_t *, char *);
 semaine_t **  rechercherSemaine (semaine_t **, char *, int *);
-void insertionSemaine (semaine_t **, semaine_t *);
-void creerListe (semaine_t **, FILE *);
 int lectureFichier(char *, semaine_t **);
 int sauvegardeDansFichier(semaine_t *);
 void suppressionSemaine(semaine_t **);

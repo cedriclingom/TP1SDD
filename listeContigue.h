@@ -1,3 +1,12 @@
+/*------------------------------------------------------------------------------------------------------*/
+/*                                        listeContigue.h                                               */
+/*                                                                                                      */
+/* Le role	:   les prototypes des tous les sous-foctions qui participent dans la creation              */
+/*              d'une liste contiguë des jours où une action contenant un motif (chaine de caractères)  */
+/*              donné est présente. Cette liste sera gérée avec un pointeur de tête et un pointeur      */ 
+/*              de fin et définie avec une taille fixe maximum.                                         */
+/*------------------------------------------------------------------------------------------------------*/
+
 #ifndef AGENDA_LISTECONTIGUE_H
 #define AGENDA_LISTECONTIGUE_H
 

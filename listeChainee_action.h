@@ -26,9 +26,9 @@ typedef struct action
 
 
 
-action_t * allocationAction ();
-void creerAction (action_t *, char*, char *);
-action_t ** rechercherAction (action_t **, char *, int *);
-void insertionAction (action_t **, action_t *);
-void suppressionAction(action_t **);
+action_t * AllocationAction ();
+void CreerAction (action_t *, char *, char *);
+action_t ** RechercherAction (action_t **, char *, int *);
+void InsertionAction (action_t **,action_t *);
+void SuppressionAction(action_t **);
 #endif

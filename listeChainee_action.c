@@ -1,3 +1,18 @@
+/*------------------------------------------------------------------------------------------------------*/
+/*                                        listeChainee_action.c                                         */                                                                           
+/* Le role	:   tous les sous-fonctions qu'on utilise pour la creation d'une liste chainee d'actions    */
+/*              triée à partir d'un fichier de données  où son nom est donné en ligne de commande       */
+/*------------------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
 #include "./listeChainee_action.h"
 
 /*--------------------------------------------------------------------------------------------------*/

@@ -25,16 +25,16 @@ typedef struct jour
 }jour_t;
 
 
-int compareChaineN (char *, char *, int);
-int rechercherMotif(char *, char *);
-jour_t ** allocationListeContigue ();
-jour_t * allocationJour();
-void creerJour(jour_t *, semaine_t *, action_t *);
-void insererJour(jour_t **, jour_t *,int);
-jour_t * lectureSemaineJour();
-int lectureMotif(char **);
-void creerListeJour(semaine_t *, char *, jour_t **,jour_t ***);
-void afficherListeContigue(jour_t **, jour_t **);
-void libererListeContigue(jour_t **, jour_t **);
+int CompareChaineN (char *, char *, int);
+int RechercherMotif(char *, char *);
+jour_t ** AllocationListeContigue ();
+jour_t * AllocationJour();
+void CreerJour(jour_t *, semaine_t *, action_t *);
+void InsererJour(jour_t **, jour_t *,int);
+jour_t * LectureSemaineJour();
+int LectureMotif(char **);
+void CreerListeJour(semaine_t *, char *, jour_t **,jour_t ***);
+void AfficherListeContigue(jour_t **, jour_t **);
+void LibererListeContigue(jour_t **, jour_t **);
 
 #endif

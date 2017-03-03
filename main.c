@@ -3,51 +3,93 @@
 
 int main (int argc, char ** argv)
 {
-  int choix;
-  char * pMotif = NULL;
-  semaine_t * pTeteAgenda = NULL;
-  jour_t ** pTeteListeContigue = NULL, ** pFinListeContigue=NULL, * pJour = NULL;
+
+  int choix, CodeLecture = 1, CodeSauvegarde = 1;
+
+  char * pmotif = NULL;
+
+  semaine_t * PteteAgenda = NULL;
+
+  jour_t ** PteteListeContigue = NULL, ** PfinListeContigue=NULL, * pjour = NULL;
+
   if (argc == 2)
     {
+
+      LectureFichier(argv[1], &PteteAgenda, &CodeLecture);
+
       printf("Veuillez choisir l'opération à faire!\n");
+
       printf("1. Creer la liste à deux niveaux et sauvegarder\n");
+
       printf("2. Creer la liste contigue des jours contenant un motif\n");
+
       printf("3. Supprimer une action\n");
+
       scanf("%d", &choix);
+
       switch(choix)
 	{
+
 	case 1:
-	   if (lectureFichier(argv[1], &pTeteAgenda))
+
+	   if (CodeLecture)
 	     {
-	       sauvegardeDansFichier(pTeteAgenda);
+
+	       SauvegardeDansFichier(PteteAgenda, &CodeSauvegarde);
+
 	     }
+
 	   break;
+
 	case 2:
-	  if (lectureFichier(argv[1], &pTeteAgenda))
+
+	  if (CodeLecture)
 	     {
-	       pTeteListeContigue = allocationListeContigue();
-	       if ((pTeteListeContigue !=NULL) && (lectureMotif(&pMotif)))
+
+	       PteteListeContigue = allocationListeContigue();
+
+	       if ((PteteListeContigue != NULL) && (lectureMotif(&pmotif)))
 		 {
-		   creerListeJour(pTeteAgenda, pMotif, pTeteListeContigue, &pFinListeContigue);
-		   afficherListeContigue(pTeteListeContigue, pFinListeContigue);
-		   libererListeContigue(pTeteListeContigue, pFinListeContigue);
-		   free(pMotif);
+
+		   creerListeJour(PteteAgenda, pmotif, PteteListeContigue, &PfinListeContigue);
+
+		   afficherListeContigue(PteteListeContigue, PfinListeContigue);
+
+		   libererListeContigue(PteteListeContigue, PfinListeContigue);
+
+		   free(pmotif);
+
 		 }
 	     }
+
 	  break;
+
 	case 3:
-	   if (lectureFichier(argv[1], &pTeteAgenda))
+
+	   if (CodeLecture)
 	     {
-	       sauvegardeDansFichier(pTeteAgenda);
-	       pJour = lectureSemaineJour();
-	       if(pJour != NULL)
+
+	       SauvegardeDansFichier(PteteAgenda, &CodeSauvegarde);
+
+	       pjour = lectureSemaineJour();
+
+	       if(pjour != NULL)
 		 {
-		   supression(&pTeteAgenda,pJour->ann_sem, pJour->jour_heure);
-		   free(pJour);
+
+		   supression(&PteteAgenda,pjour->ann_sem, pjour->jour_heure);
+
+		   free(pjour);
+
 		 }
+
 	     }
+
 	}
-      libererListe(&pTeteAgenda);      
+
+      LibererListe(&PteteAgenda);
+      
     }
+
   return 0;
+
 }

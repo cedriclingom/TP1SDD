@@ -1,3 +1,9 @@
+/*-----------------------------------------------------------------------------------------------------------------*/
+/* listeChainee_semaine.h:    Déclaration des directives de compilation, constantes symboliques, types et          */
+/*                            prototypes.                                                                          */
+/*-----------------------------------------------------------------------------------------------------------------*/
+
+
 #ifndef AGENDA_LISTECHAINEE_SEMAINE_H
 #define AGENDA_LISTECHAINEE_SEMAINE_H
 
@@ -19,25 +25,40 @@
 
 typedef struct semaine
 {
+
   char ann_sem[TAILLE_SEMAINE];
-  action_t * pListeAction;
-  struct semaine * pSem_suiv;
+
+  action_t * PlisteAction;
+
+  struct semaine * psem_suiv;
+
 }semaine_t;
 
 
 
 
+semaine_t * AllocationSemaine();
+
 void CreerSemaine (semaine_t *, char *);
+
 void InsertionSemaine (semaine_t **, semaine_t *);
+
+semaine_t **  RechercherSemaine (semaine_t **, char *, int *);
+
+void SuppressionSemaine(semaine_t **);
+
+void LibererListe(semaine_t **);
+
 void CreerListe (semaine_t **, FILE *);
-semaine_t * allocationSemaine();
-semaine_t **  rechercherSemaine (semaine_t **, char *, int *);
-int lectureFichier(char *, semaine_t **);
-int sauvegardeDansFichier(semaine_t *);
-void suppressionSemaine(semaine_t **);
-void afficheSauvegarde();
+
+void LectureFichier(char *, semaine_t **, int *);
+
+void SauvegardeDansFichier(semaine_t *, int *);
+
+void AfficheSauvegarde();
+
 void supression(semaine_t **, char *, char *);
-void libererListe(semaine_t **);
+
 
 
 

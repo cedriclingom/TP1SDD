@@ -25,17 +25,29 @@
 
 typedef struct action
 {
+
   char jour_heure[TAILLE_JOUR_HR];
+
   char nom_action[TAILLE_ACTION];
-  struct action * pAction_suiv;
+
+  struct action * paction_suiv;
+
 }action_t;
 
 
 
 
 action_t * AllocationAction ();
+
 void CreerAction (action_t *, char *, char *);
+
 action_t ** RechercherAction (action_t **, char *, int *);
+
 void InsertionAction (action_t **,action_t *);
+
 void SuppressionAction(action_t **);
+
+
+
+
 #endif

@@ -46,16 +46,20 @@ int main (int argc, char ** argv)
 	  if (CodeLecture)
 	     {
 
-	       PteteListeContigue = allocationListeContigue();
+	       PteteListeContigue = AllocationListeContigue();
+	       
+	       CodeLecture = 1;
 
-	       if ((PteteListeContigue != NULL) && (lectureMotif(&pmotif)))
+	       LectureMotif(&pmotif, &CodeLecture);
+
+	       if ((PteteListeContigue != NULL) && CodeLecture)
 		 {
 
-		   creerListeJour(PteteAgenda, pmotif, PteteListeContigue, &PfinListeContigue);
+		   CreerListeJour(PteteAgenda, pmotif, PteteListeContigue, &PfinListeContigue);
 
-		   afficherListeContigue(PteteListeContigue, PfinListeContigue);
+		   AfficherListeContigue(PteteListeContigue, PfinListeContigue);
 
-		   libererListeContigue(PteteListeContigue, PfinListeContigue);
+		   LibererListeContigue(PteteListeContigue, PfinListeContigue);
 
 		   free(pmotif);
 
@@ -71,7 +75,7 @@ int main (int argc, char ** argv)
 
 	       SauvegardeDansFichier(PteteAgenda, &CodeSauvegarde);
 
-	       pjour = lectureSemaineJour();
+	       pjour = LectureSemaineJour();
 
 	       if(pjour != NULL)
 		 {

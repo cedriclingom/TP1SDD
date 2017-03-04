@@ -24,7 +24,7 @@
 /*------------------------------------------------------------------------------------------------------------------*/
 /* AllocationSemaine         Alloue un bloc semaine où sera stocker la semaine.                                     */
 /*                                                                                                                  */
-/* En entrée:   Rien en Entrée                                                                                      */
+/* En entrée:   Rien en entrée                                                                                      */
 /*                                                                                                                  */
 /* En sortie:   On retourne l'adresse du bloc semaine alloué.                                                       */
 /*                                                                                                                  */
@@ -52,7 +52,7 @@ semaine_t * AllocationSemaine()
 /*                      semaine lu à partir d'un fichier.                                                                    */
 /*                                                                                                                           */
 /* En entrée:   psemaine - Pointeur sur le bloc alloué pour la semaine.                                                      */
-/*                     s - La chaine à introduire dans le bloc.                                                              */
+/*                     s - Chaine de caractères contenant l'année et la semaine.                                             */
 /*                                                                                                                           */
 /* En sortie:   Rien en sortie                                                                                               */
 /*---------------------------------------------------------------------------------------------------------------------------*/
@@ -75,7 +75,7 @@ void CreerSemaine(semaine_t * psemaine, char * s)
 
 
 /*------------------------------------------------------------------------------------------------------------------------*/
-/* InsertionCompare       Insère une nouvelle semaine dans la liste chainée des semaines.                                 */
+/* InsertionSemaine       Insère une nouvelle semaine dans la liste chainée des semaines.                                 */
 /*                                                                                                                        */
 /* En entrée:   ppsemaine - Pointeur de pointeur de tete de liste chainée des semaines ou pointeur sur la case pointeur   */
 /*                          de l'élément précédent.                                                                       */
@@ -120,7 +120,7 @@ void SuppressionSemaine(semaine_t ** ppsemaine)
 
   free(psemaine);                                             /*supprime la semaine*/
 
-  psemaine=NULL;
+  psemaine = NULL;
 
 }
 
@@ -149,7 +149,7 @@ void LibererListe(semaine_t ** ppsemaine)
       while((*ppsemaine)->PlisteAction != NULL)
 	{
 
-	  suppressionAction(&((*ppsemaine)->PlisteAction));   /*libère la liste chainée des actions associés à chaque semaine*/
+	  SuppressionAction(&((*ppsemaine)->PlisteAction));   /*libère la liste chainée des actions associés à chaque semaine*/
 
 	}
       SuppressionSemaine(ppsemaine);
@@ -166,13 +166,11 @@ void LibererListe(semaine_t ** ppsemaine)
 /*-------------------------------------------------------------------------------------------------------------------------*/
 /* RechercherSemaine        Recherche une semaine dans la liste chainée des semaines.                                      */
 /*                                                                                                                         */
-/* En entrée:   PpteteListe - Pointeur sur la tête de la liste chainée des semaines.                                       */
-/*                      pprec - Pointeur de pointeur de tete de la liste chainée des semaines ou pointeur sur la case      */
-/*                              d'élément précédent dans la liste chainée de semaines.                                     */
+/* En entrée:     PpteteListe - Pointeur de pointeur de tête de la liste chainée des semaines.                             */
 /*                    pvaleur - Pointeur sur la semaine à rechercher (qui est une chaine de caractères).                   */
 /*                   ptrouver - Pointeur sur une case mémoire contenant 0 si on a pas trouvé ou 1 si on a trouvé la chaine */
 /*                                                                                                                         */
-/* En sortie:           pprec - Retourne l'adresse du pointeur de tete de liste chainée des semaines ou l'adresse de la    */
+/* En sortie:            prec - Retourne l'adresse du pointeur de tete de liste chainée des semaines ou l'adresse de la    */
 /*                              case pointeur de l'élément précédent dans la liste chainée de semaines.                    */
 /*                   ptrouver - Pointeur sur une case mémoire contenant 0 si on a pas trouvé l'élément ou 1 si on a trouvé */
 /*                              dans la liste chainée des semaines.                                                        */
@@ -192,7 +190,7 @@ semaine_t **  RechercherSemaine (semaine_t ** PpteteListe,char * pvaleur, int * 
   while   ((pcour != NULL) && (strcmp(pvaleur, pcour->ann_sem) > 0)) /*Tantque je suis dans la liste et que ma chaine est plus grande*/
     {
       
-      prec = &(pcour->psem_suiv);                                    /*On récupère l'adresse de la case pointeur de l'élément précédent*/
+      prec = &(pcour->psem_suiv);                                    /*On récupère l'adresse de la case pointeur de l'élément courant*/
       
       pcour = *prec;                                                 /*Passe au suivant*/
       
@@ -206,6 +204,7 @@ semaine_t **  RechercherSemaine (semaine_t ** PpteteListe,char * pvaleur, int * 
     }
 
   return prec;
+
 }
 
 
@@ -284,19 +283,19 @@ void CreerListe (semaine_t ** PpteteListe, FILE * f)
 
 	      trouver = 0;
 
-	      PrecAction = rechercherAction (&((*PrecSemaine)->PlisteAction), s2, &trouver);
+	      PrecAction = RechercherAction (&((*PrecSemaine)->PlisteAction), s2, &trouver);
 
 	      if (!(trouver))                                             /*Si j'ai trouver l'action rechercher*/
 		{
 
-		  paction = allocationAction();
+		  paction = AllocationAction();
 
 		  if (paction != NULL)                                    /*Vérifier si l'allocation de l'action c'est bien passé*/
 		    {
 
-		      creerAction (paction, s2, s3);
+		      CreerAction (paction, s2, s3);
 
-		      insertionAction(PrecAction, paction);
+		      InsertionAction(PrecAction, paction);
 
 		    }
 		  else
@@ -305,10 +304,15 @@ void CreerListe (semaine_t ** PpteteListe, FILE * f)
 			  LibererListe(PpteteListe);
 
 		    }
+
 		}
+
 	    }
+
 	}
+
     }
+
 }
 
 
@@ -405,7 +409,7 @@ void SauvegardeDansFichier(semaine_t * PteteListe, int * PcodeSauvegarde)
 
 	      fprintf(f,"%s%s%s", pcour1->ann_sem, pcour2->jour_heure, pcour2->nom_action);
 
-	      pcour2 = pcour2->pAction_suiv;                                               /*passe à l'action suivante*/
+	      pcour2 = pcour2->paction_suiv;                                               /*passe à l'action suivante*/
 	      
 	    }
 
@@ -508,14 +512,12 @@ void supression(semaine_t ** PpteteListe, char * ann_sem, char * jour_heure)
       if (trouver)                                                                               /* si j'ai trouver la semaine rechercher*/
 	{
 
-	  trouver = 0;
-
-	  PrecAction = rechercherAction(&((*PrecSemaine)->PlisteAction), jour_heure, &trouver);
+	  PrecAction = RechercherAction(&((*PrecSemaine)->PlisteAction), jour_heure, &trouver);
 
 	  if(trouver)                                                                            /* si j'ai trouver l'action rechercher*/
 	    {
 
-	      suppressionAction(PrecAction);
+	      SuppressionAction(PrecAction);
 
 	      if((*PrecSemaine)->PlisteAction == NULL)
 		{

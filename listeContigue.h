@@ -1,10 +1,10 @@
 /*------------------------------------------------------------------------------------------------------*/
 /*                                        listeContigue.h                                               */
 /*                                                                                                      */
-/* Le role : les prototypes des tous les sous-foctions qui participent dans la creation                 */
-/*           d'une liste contiguë des jours où une action contenant un motif (chaine de caractères)     */
-/*           donné est présente. Cette liste sera gérée avec un pointeur de tête et un pointeur         */ 
-/*           de fin et définie avec une taille fixe maximum.                                            */
+/* Role: Les prototypes des tous les fonctions qui participent dans la creation                         */
+/*       d'une liste contiguë des jours (qui est une structure) où une action contenant                 */
+/*       un motif (chaine de caractères) donné est présente. Cette liste sera gérée avec                */
+/*       un pointeur de tête et un pointeur de fin et définie avec une taille fixe maximum.             */
 /*------------------------------------------------------------------------------------------------------*/
 
 #ifndef AGENDA_LISTECONTIGUE_H
@@ -51,7 +51,7 @@ void CreerJour(jour_t *, semaine_t *, action_t *);
 
 void InsererJour(jour_t **, jour_t *,int);
 
-jour_t * LectureSemaineJour();
+void LectureSemaineJour(jour_t *, int *);
 
 void LectureMotif(char **, int *);
 
@@ -59,7 +59,7 @@ void CreerListeJour(semaine_t *, char *, jour_t **,jour_t ***);
 
 void AfficherListeContigue(jour_t **, jour_t **);
 
-void LibererListeContigue(jour_t **, jour_t **);
+void LibererListeContigue(jour_t ***, jour_t ***);
 
 
 

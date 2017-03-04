@@ -1,6 +1,8 @@
 /*---------------------------------------------------------------------------------------------------------------------------*/
-/*   listeChaine_semaine.c:  Définition des fonctions permettent de manipuler la listeChainée des semaines                   */
-/*                           et les actions associées à une année, semaine, jour et heure particulière.                      */
+/*                                                  listeChaine_semaine.c                                                    */
+/*                                                                                                                           */
+/* Role:  Définition des fonctions permettent de manipuler la listeChainée des semaines et les actions associées à une année,*/
+/*        semaine, jour et heure particulière.                                                                               */
 /*                                                                                                                           */
 /*                                                                                                                           */
 /*                                                                                                                           */
@@ -324,7 +326,7 @@ void CreerListe (semaine_t ** PpteteListe, FILE * f)
 
 
 
-/********************************************************************************************************************/
+/*------------------------------------------------------------------------------------------------------------------*/
 /* LectureFichier           Lire chaque ligne de notre fichier qui contient comme données année, semaine, jour,     */
 /*                          heure et créer une liste chainée à deux niveaux à partir de cette lecture.              */
 /*                                                                                                                  */

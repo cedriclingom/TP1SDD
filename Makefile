@@ -13,7 +13,7 @@ LDFLAGS = -lm
 
 #liste des fichiers objets
 
-OBJ = main.o listeChainee_semaine.o listeChainee_action.o listeContigue.o listeBilatere.o
+OBJ = main.o listeChainee_semaine.o listeChainee_action.o listeContigue.o
 
 
 #Règle d'éxécution
@@ -37,17 +37,13 @@ listeChainee_action.o : listeChainee_action.c listeChainee_action.h
 listeContigue.o: listeContigue.c listeContigue.h
 	$(CC) -c listeContigue.c $(CFLAGS) $(LDFLAGS)
 
-
-listeBilatere.o : listeBilatere.c listeBilatere.h
-	$(CC) -c listeBilatere.c $(CFLAGS) $(LDFLAGS)
-
 main.o : main.c listeContigue.h
 	$(CC) -c main.c $(CFLAGS) $(LDFLAGS)
 
 #Regle pour nettoyer
 
 clean :
-	rm $(OBJ) *.*~
+	rm $(OBJ)
 
 
 #Regle d'utilisation de valgrind

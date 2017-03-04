@@ -1,6 +1,8 @@
 /*----------------------------------------------------------------------------------------------------------------*/
-/* listeContigue.c:    Définition des fonctions permettant de créer la liste contigue des jours à partir d'un     */
-/*                     motif contenu dans une action et la manipulation cette liste contigue.                     */
+/*                                                  listeContigue.c                                               */
+/*                                                                                                                */
+/* Role : Définition des fonctions permettant de créer la liste contigue des jours à partir d'un motif contenu    */
+/*        dans une action et la manipulation cette liste contigue.                                                */
 /*----------------------------------------------------------------------------------------------------------------*/
 
 
@@ -83,22 +85,22 @@ int RechercherMotif(char * NomAction, char * motif)
       if (!NbCompare)                                                                 /*si le premier caractère du motif n'est pas trouver*/
 	{
 
-	  tailleResteAction -= nbCompare+1;
+	  TailleResteAction -= NbCompare+1;
 
-	  decalage += nbCompare+1;
+	  decalage += NbCompare+1;
 
 	}
       else
 	{
-	   tailleResteAction -= nbCompare;
+	   TailleResteAction -= NbCompare;
 
-	   decalage += nbCompare;
+	   decalage += NbCompare;
 
 	}
 
     }
 
-  return nbCompare;
+  return NbCompare;
 
 }
 
@@ -164,22 +166,17 @@ jour_t * AllocationJour()
 
 /*---------------------------------------------------------------------------------------------------------------*/
 /* LectureSemaineJour   Permet de lire au clavier l'année, la semaine, le jour, l'heure de l'action qui sera     */
-/*                      supprimer.                                                                               */
+/*                      supprimer et insère ces données année, semaine, jour, heure dans un bloc jour.           */
 /*                                                                                                               */
-/* En entrée:    Rien en entrée.                                                                                 */
+/* En entrée:    pjour - Pointeur sur le bloc alloué.                                                            */
+/*               PcodeLecture - Pointeur sur la case qui contient 1 si la lecture c'est bien passé et 0 sinon.   */
 /*                                                                                                               */
-/* En sortie:    Retourne l'adresse du bloc jour contenant comme données année, semaine, jour et heure alloué.   */
-/*                                                                                                               */
-/* Variable(s) locale(s):    pjour - Pointeur sur le bloc alloué.                                                */
+/* En sortie:    PcodeLecture - Pointeur sur la case contient 1 si la lecture c'est bien passé et 0 sinon.       */
 /*---------------------------------------------------------------------------------------------------------------*/
 
 
-jour_t * LectureSemaineJour()
+void LectureSemaineJour(jour_t * pjour, int * PcodeLecture)
 {
-  jour_t * pjour= allocationJour();
-
-  if(pjour != NULL)
-    {
 
       printf("Le contenu de la sauvegarde avant supression\n");
 
@@ -190,17 +187,29 @@ jour_t * LectureSemaineJour()
 
 	  printf("Veuillez entrer l'année et la semaine\n");
 
-	  scanf("%s", pjour->ann_sem);
+	  *PcodeLecture = scanf("%s", pjour->ann_sem);
+	  
+	  if (*PcodeLecture)                                          /*si la lecture est à marcher*/
+	    {
+	      
+	      printf("Veuillez entrer le jour et l'heure\n");
+	      
+	      *PcodeLecture = scanf("%s", pjour->jour_heure);         /*j'effectue la deuxième lecture*/
+	    }
+	}while ((!*PcodeLecture) || ((strlen(pjour->ann_sem) != TAILLE_SEMAINE-1) || (strlen(pjour->jour_heure) != TAILLE_JOUR_HR-1))); /*tantque les chaines lu ne sont pas bonne*/
 
-	  printf("Veuillez entrer le jour et l'heure\n");
+      if(*PcodeLecture)
+	{
 
-	  scanf("%s", pjour->jour_heure);
+	  *PcodeLecture = 1;
 
-	}while ((strlen(pjour->ann_sem) != TAILLE_SEMAINE-1) || (strlen(pjour->jour_heure) != TAILLE_JOUR_HR-1)); /*tantque les chaines lu ne sont pas bonne*/
+	}
+      else
+	{
 
-    }
+	  *PcodeLecture = 0;
 
-  return pjour;
+	}
 
 }
 
@@ -279,7 +288,7 @@ void LectureMotif(char ** ppmotif, int * PcodeLecture)
 
   *PcodeLecture = scanf("%d",&TailleMotif);
   
-  if (*PcodeLecture)
+  if (*PcodeLecture)                                               /*si la lecture bien passé*/
     {
 
       *ppmotif = malloc((TailleMotif+1) * sizeof(char));
@@ -308,82 +317,205 @@ void LectureMotif(char ** ppmotif, int * PcodeLecture)
 
 }
 
-void creerListeJour(semaine_t * pTeteListe, char * motif, jour_t ** pDebut, jour_t *** ppFin)
+
+
+
+
+
+
+
+/*------------------------------------------------------------------------------------------------------------*/
+/* CreerListeJour          Créer la liste contigue de pointeur vers chaque jour dont l'action contenez un     */
+/*                         motif.                                                                             */
+/*                                                                                                            */
+/* En entrée:    PteteListe - Pointeur de tete de liste chainée des semaines.                                 */
+/*                    motif - Chaine caractères qui représente le motif.                                      */
+/*                   pdebut - Pointeur de début de liste de contigue de pointeurs de jour.                    */
+/*                    ppfin - L'adresse du pointeur de fin de liste contigue dont les éléments sont           */
+/*                            des pointeurs de jours.                                                         */
+/*                                                                                                            */
+/* En sortie:         ppfin - L'adresse du pointeur de fin de liste contigue dont les éléments sont           */
+/*                            des pointeurs de jours.                                                         */
+/*                                                                                                            */
+/* Variable(s) locale(s):       NbElement - Le nombre d'éléments déjà insérer dans la liste contigue.         */
+/*                           MotifTrouver - Contient la taille du motif si le motif à été trouvé et 0 si le   */
+/*                                          motif n'a pas été trouvé.                                         */
+/*                            TailleMotif - La taille du motif.                                               */
+/*------------------------------------------------------------------------------------------------------------*/
+
+
+void CreerListeJour(semaine_t * PteteListe, char * motif, jour_t ** pdebut, jour_t *** ppfin)
 {
-  semaine_t * pcour1 = pTeteListe;
+  int NbElement = 0, MotifTrouver = 0, TailleMotif = strlen(motif);
+
+  semaine_t * pcour1 = PteteListe;                   /*initialise à la tete de liste des semaines*/
+
   action_t * pcour2 = NULL;
-  jour_t * pJour = NULL;
-  int nbElm=0, motifTrouver=0,tailleMotif=strlen(motif);
-  *ppFin = NULL;
-  while ((nbElm < TAILLE_MAX) && (pcour1 != NULL))
+
+  jour_t * pjour = NULL;
+
+  *ppfin = NULL;
+
+  while ((NbElement < TAILLE_MAX) && (pcour1 != NULL))   /*tanque je peux insérer dans ma liste contigue et je suis dans la liste des semaines*/
     {
-      pcour2 = pcour1->PlisteAction;
-      while((nbElm < TAILLE_MAX) && (pcour2 != NULL))
+      pcour2 = pcour1->PlisteAction;                 /*initialise à la tete de liste des actions associé à cette semaine*/
+
+      while((NbElement < TAILLE_MAX) && (pcour2 != NULL))/*tanque je peux insérer dans ma liste contigue et je suis dans la liste des actions*/
 	{
-	  motifTrouver = rechercherMotif(pcour2->nom_action,motif);
-	  if(motifTrouver == tailleMotif)
+
+	  MotifTrouver = RechercherMotif(pcour2->nom_action,motif); /*recherche le motif dans l'action courante*/
+
+	  if(MotifTrouver == TailleMotif)
 	    {
-	      pJour = allocationJour();
-	      if (pJour != NULL)
+
+	      pjour = AllocationJour();
+
+	      if (pjour != NULL)
 		{
-		  creerJour(pJour, pcour1, pcour2);
-		  if(*ppFin != NULL)
+
+		  CreerJour(pjour, pcour1, pcour2);
+
+		  if(*ppfin != NULL)                                 /*si j'ai insérer dans la liste contigue au moins un élément*/
 		    {
-		      *ppFin = *ppFin + 1;
+
+		      *ppfin = *ppfin + 1;
+
 		    }
-		  else
+		  else                                               /* si j'insère le premier élément de la liste contigue*/
 		    {
-		      *ppFin = pDebut;
+
+		      *ppfin = pdebut;
+           
 		    }
-		  insererJour(pDebut,pJour, nbElm);
-		  ++nbElm;
+
+		  InsererJour(pdebut, pjour, NbElement);              /* insère le jour dans la liste contigue*/
+
+		  ++NbElement;
+
 		}
+
 	    }
-	  pcour2 = pcour2->paction_suiv;
+
+	  pcour2 = pcour2->paction_suiv;                             /*passe à l'action suivante*/
+
 	}
-      pcour1 = pcour1->psem_suiv;
+
+      pcour1 = pcour1->psem_suiv;                                    /*passe à la seamines suivante*/
+
     }
+
 }
 
 
-void afficherListeContigue(jour_t ** pDebut, jour_t **pFin)
+
+
+
+
+
+
+/*----------------------------------------------------------------------------------------------------------------*/
+/* AfficherListeContigue          Affiche la liste contigue de jours.                                             */
+/*                                                                                                                */
+/* En entrée:   pdebut - Pointeur de début de liste de contigue de pointeurs de jour.                             */
+/*                pfin - Pointeur de fin de liste contigue dont les éléments sont des pointeurs de jours.         */
+/*                                                                                                                */
+/* En sortie:   Rien en sortie.                                                                                   */
+/*                                                                                                                */
+/* Variable(s) locale(s):    i, j - Varieble servant d'indice dans le tableau.                                    */
+/*                           prec - Pointeur de pointeur de l'élément précédent.                                  */
+/*----------------------------------------------------------------------------------------------------------------*/
+
+            
+void AfficherListeContigue(jour_t ** pdebut, jour_t ** pfin)
 {
+
   int i=0, j=0;
-  jour_t ** pcour=pDebut, ** pprec=NULL;
-  if (pFin != NULL)
+
+  jour_t ** prec=NULL;
+
+  if (pfin != NULL)                                                                     /*si la liste est non vide*/
     {
-      pprec = pcour;
-      printf("%s\n", pcour[i]->ann_sem);
-      while ((pcour + i) <= pFin){
-	while(((pcour + i) <= pFin) && !strcmp(pcour[i]->ann_sem, pprec[j]->ann_sem))
+
+      prec = pdebut;                                                                    /*initialise le précédent au premier élément*/
+      
+      printf("\nLes jours et heures associés à chaque semaine des actions ayant se motifs sont:\n");
+ 
+      printf("%s\n", pdebut[i]->ann_sem);                                               /*affiche l'année et semaine courante*/
+
+      while ((pdebut + i) <= pfin)                                                      /*tanque qu'on dans la liste contigue*/
+	{
+
+	  while(((pdebut + i) <= pfin) && !strcmp(pdebut[i]->ann_sem, prec[j]->ann_sem))/*tantque qu'on est dans la liste contigue et que l'année et la semaine du précédent et courant sont égaux*/
 	  {
-	    printf("\t%s\n",pcour[i]->jour_heure);
+
+	    printf("\t%s\n", pdebut[i]->jour_heure);                                    /*afficher juste le jour et l'heure*/
+
 	    ++i;
+
 	  }
-	if (((pcour + i) <= pFin) && strcmp(pcour[i]->ann_sem, pprec[j]->ann_sem))
+	if (((pdebut + i) <= pfin) && strcmp(pdebut[i]->ann_sem, prec[j]->ann_sem))     /*si on est dans la liste contigue et que l'année et la semaine du précédent et courant sont différents*/
 	  {
-	    printf("\n%s\n", pcour[i]->ann_sem);
-	    printf("\t%s\n", pcour[i]->jour_heure);
-	    j=i;
+
+	    printf("\n%s\n", pdebut[i]->ann_sem);                                       /*affiche l'année et la semaine courante*/
+
+	    printf("\t%s\n", pdebut[i]->jour_heure);                                    /*affiche le jour et l'heure*/
+
+	    j=i;                                                                       
+
 	    ++i;
+
 	  }
-      }
+      
+	}
+
     }
+
 }
 
 
 
-void libererListeContigue(jour_t ** pDebut, jour_t ** pFin)
+
+
+
+
+
+/*------------------------------------------------------------------------------------------------------------*/
+/* LibererListeContigue          Libère la liste contigue.                                                    */
+/*                                                                                                            */
+/* En entrée:    ppdebut - L'adresse du pointeur de tete de liste contigue.                                   */
+/*                 ppfin - L'adresse du pointeur de fin de liste contigue.                                    */
+/*                                                                                                            */
+/* En sortie:    ppdebut - L'adresse du pointeur de tete de liste contigue.                                   */
+/*                 ppfin - L'adresse du pointeur de fin de liste contigue.                                    */
+/*                                                                                                            */
+/* Variable(s) locale(s):    i - Variable servant d'indicage.                                                 */
+/*------------------------------------------------------------------------------------------------------------*/
+
+ 
+void LibererListeContigue(jour_t *** ppdebut, jour_t *** ppfin)
 {
+
   int i=0;
-  if(pFin != NULL)
+
+  if(*ppfin != NULL)                                       /*si liste non vide*/
     {
-      while ((pDebut+i) < pFin)
+
+      while ((*ppdebut+i) < *ppfin)                        /*tantque je ne suis pas à la fin de la liste*/
 	{
-	  free(pDebut[i]);
+
+	  free(*ppdebut[i]);
+
 	  ++i;
+
 	}
-      free(pDebut[i]);
+      free(*ppdebut[i]);
+
     }
-  free(pDebut);
+
+  free(*ppdebut);
+
+  *ppdebut = NULL;
+
+  *ppfin = NULL;
+
 }

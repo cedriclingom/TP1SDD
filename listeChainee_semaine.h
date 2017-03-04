@@ -1,6 +1,7 @@
 /*-----------------------------------------------------------------------------------------------------------------*/
-/* listeChainee_semaine.h:    Déclaration des directives de compilation, constantes symboliques, types et          */
-/*                            prototypes.                                                                          */
+/*                                             listeChainee_semaine.h                                              */
+/*                                                                                                                 */
+/* Role:    Déclaration des directives de compilation, constantes symboliques, types et prototypes.                */                       /*                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------*/
 
 

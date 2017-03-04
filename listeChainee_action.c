@@ -1,14 +1,9 @@
 /*------------------------------------------------------------------------------------------------------*/
-/*                                        listeChainee_action.c                                         */                       
-/* Le role:   Définition des fonctions qu'on utilise pour la creation d'une liste chainee d'actions     */
-/*            triée à partir d'un fichier de données  où son nom est donné en ligne de commande         */
+/*                                        listeChainee_action.c                                         */
+/*                                                                                                      */                       
+/* Role:   Définition des fonctions qu'on utilise pour la creation d'une liste chainee d'actions        */
+/*         triée à partir d'un fichier de données  où son nom est donné en ligne de commande            */
 /*------------------------------------------------------------------------------------------------------*/
-
-
-
-/*---------------------------------------------------------------------------------------------------------------*/
-/* listeChainee_action.c:    Définition des fonctions permettant de manipuler la liste chainée d'actions.        */
-/*---------------------------------------------------------------------------------------------------------------*/
 
 
 

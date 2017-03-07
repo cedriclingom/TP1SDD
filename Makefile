@@ -16,10 +16,6 @@ LDFLAGS = -lm
 OBJ = main.o listeChainee_semaine.o listeChainee_action.o listeContigue.o
 
 
-#Règle d'éxécution
-#exe : main
-#	./main lecture.txt
-
 #Regle de production de l'exécutable
 
 main : $(OBJ)
@@ -44,10 +40,3 @@ main.o : main.c listeContigue.h
 
 clean :
 	rm $(OBJ)
-
-
-#Regle d'utilisation de valgrind
-
-#valgrind:  main
-#	$(VG) ./main fichier.txt
-

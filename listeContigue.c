@@ -288,6 +288,8 @@ void LectureMotif(char ** ppmotif, int * PcodeLecture)
 
   *PcodeLecture = scanf("%d",&TailleMotif);
   
+  getchar();
+
   if (*PcodeLecture)                                               /*si la lecture bien passé*/
     {
 
@@ -298,21 +300,20 @@ void LectureMotif(char ** ppmotif, int * PcodeLecture)
 
 	  printf("Veuillez entrer votre motif!\n");
 
-	  *PcodeLecture = scanf("%s",*ppmotif);
+	  if(fgets(*ppmotif,TailleMotif+1,stdin)!= NULL)
+	    {
+
+	      *PcodeLecture = 1;
+
+	    }
+	  else
+	    {
+	      
+	      *PcodeLecture = 0;
+
+	    }
 	  
 	}
-    }
-  if(*PcodeLecture)
-    {
-
-      *PcodeLecture = 1;
-
-    }
-  else
-    {
-
-      *PcodeLecture = 0;
-
     }
 
 }
@@ -503,12 +504,12 @@ void LibererListeContigue(jour_t *** ppdebut, jour_t *** ppfin)
       while ((*ppdebut+i) < *ppfin)                        /*tantque je ne suis pas à la fin de la liste*/
 	{
 
-	  free(*ppdebut[i]);
+	  free((*ppdebut)[i]);
 
 	  ++i;
 
 	}
-      free(*ppdebut[i]);
+      free((*ppdebut)[i]);
 
     }
 

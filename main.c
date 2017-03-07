@@ -25,7 +25,7 @@
 int main (int argc, char ** argv)
 {
 
-  int choix, CodeLecture = 1, CodeSauvegarde = 1;
+  int choix, CodeLecture = 1, CodeSauvegarde = 1, code;
 
   char * pmotif = NULL;
 
@@ -46,82 +46,88 @@ int main (int argc, char ** argv)
 
       printf("3. Supprimer une action.\n");
 
-      scanf("%d", &choix);
-
-      switch(choix)
+      code = scanf("%d", &choix);
+      if(code)
 	{
-
-	case 1:
-
-	  if (CodeLecture)                                      /*si lecture à partir fichier entrée en ligne de commande c'est bien passé*/
+	  
+	  switch(choix)
 	    {
-
-	      SauvegardeDansFichier(PteteAgenda, &CodeSauvegarde); /*sauvegarde liste à deux niveau dans un fichier de sauvegarde*/
-
-	    }
-
-	  break;
-
-	case 2:
-
-	  if (CodeLecture)                                      /*si lecture à partir fichier entrée en ligne de commande c'est bien passé*/
-	    {
-
-	      PteteListeContigue = AllocationListeContigue();
-	       
-	      CodeLecture = 1;
-
-	      LectureMotif(&pmotif, &CodeLecture);
-
-	      if ((PteteListeContigue != NULL) && CodeLecture)
+	      
+	    case 1:
+	      
+	      if (CodeLecture)                                      /*si lecture à partir fichier entrée en ligne de commande c'est bien passé*/
 		{
-
-		  CreerListeJour(PteteAgenda, pmotif, PteteListeContigue, &PfinListeContigue);
-
-		  AfficherListeContigue(PteteListeContigue, PfinListeContigue);
-
-		  LibererListeContigue(&PteteListeContigue, &PfinListeContigue);
-
-		  free(pmotif);
-
+		  
+		  SauvegardeDansFichier(PteteAgenda, &CodeSauvegarde); /*sauvegarde liste à deux niveau dans un fichier de sauvegarde*/
+		  
 		}
-	    }
-
-	  break;
-
-	case 3:
-
-	  if (CodeLecture)                                      /*si lecture à partir fichier entrée en ligne de commande c'est bien passé*/
-	    {
-
-	      SauvegardeDansFichier(PteteAgenda, &CodeSauvegarde);
-
-	      pjour = AllocationJour();
-	       
-	      if(pjour != NULL)
+	      
+	      break;
+	      
+	    case 2:
+	      
+	      if (CodeLecture)                                      /*si lecture à partir fichier entrée en ligne de commande c'est bien passé*/
 		{
-
-		  LectureSemaineJour(pjour, &CodeLecture);     /*lit année, semaine, jour, heure de l'action à supprimer*/
-		   
-		  if(CodeLecture)                              /*si la lecture c'est bien passé*/
+		  
+		  PteteListeContigue = AllocationListeContigue();
+		  
+		  CodeLecture = 1;
+		  
+		  LectureMotif(&pmotif, &CodeLecture);
+		  
+		  if ((PteteListeContigue != NULL) && CodeLecture)
 		    {
+		      
+		      CreerListeJour(PteteAgenda, pmotif, PteteListeContigue, &PfinListeContigue);
+		      
+		      AfficherListeContigue(PteteListeContigue, PfinListeContigue);
 
-		      supression(&PteteAgenda,pjour->ann_sem, pjour->jour_heure);   /*je supprime l'action*/
-		       
-		      free(pjour);
+		      LibererListeContigue(&PteteListeContigue, &PfinListeContigue);
 
+		      free(pmotif);
+		      		      
 		    }
 
 		}
-
+	      
+	      break;
+	      
+	    case 3:
+	      
+	      if (CodeLecture)                                      /*si lecture à partir fichier entrée en ligne de commande c'est bien passé*/
+		{
+		  
+		  SauvegardeDansFichier(PteteAgenda, &CodeSauvegarde);
+		  
+		  pjour = AllocationJour();
+	       
+		  if(pjour != NULL)
+		    {
+		      
+		      LectureSemaineJour(pjour, &CodeLecture);     /*lit année, semaine, jour, heure de l'action à supprimer*/
+		      
+		      if(CodeLecture)                              /*si la lecture c'est bien passé*/
+			{
+			  
+			  supression(&PteteAgenda,pjour->ann_sem, pjour->jour_heure);   /*je supprime l'action*/
+			  
+			  free(pjour);
+			  
+			}
+		      
+		    }
+		  
+		}
+	      
 	    }
-
+	  
+	  LibererListe(&PteteAgenda);
+	  
 	}
-
-      LibererListe(&PteteAgenda);
       
     }
 
   return 0;
 
 }
+  

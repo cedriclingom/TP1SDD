@@ -17,8 +17,8 @@ OBJ = main.o listeChainee_semaine.o listeChainee_action.o listeContigue.o
 
 
 #Règle d'éxécution
-exe : main
-	./main fichier.txt
+#exe : main
+#	./main lecture.txt
 
 #Regle de production de l'exécutable
 
@@ -48,6 +48,6 @@ clean :
 
 #Regle d'utilisation de valgrind
 
-valgrind:  main
-	$(VG) ./main fichier.txt
+#valgrind:  main
+#	$(VG) ./main fichier.txt
 
